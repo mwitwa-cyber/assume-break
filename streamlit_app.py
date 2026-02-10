@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -11,6 +12,16 @@ if _src.exists() and str(_src) not in sys.path:
     sys.path.insert(0, str(_src))
 
 import streamlit as st
+
+# Load Streamlit Cloud secrets into environment variables
+# so pydantic-settings can pick them up automatically
+_SECRET_KEYS = ("ANTHROPIC_API_KEY", "CLAUDE_MODEL", "MAX_TOKENS", "TEMPERATURE")
+for _key in _SECRET_KEYS:
+    if _key not in os.environ:
+        try:
+            os.environ[_key] = str(st.secrets[_key])
+        except (KeyError, FileNotFoundError):
+            pass
 
 st.set_page_config(
     page_title="ASSUME-BREAK",
