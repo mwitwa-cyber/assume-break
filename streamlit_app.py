@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Ensure the src/ package is importable (needed for Streamlit Cloud)
+_src = Path(__file__).parent / "src"
+if _src.exists() and str(_src) not in sys.path:
+    sys.path.insert(0, str(_src))
+
 import streamlit as st
 
 st.set_page_config(
